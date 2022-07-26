@@ -56,6 +56,12 @@ class ParticleFilter:
                            [0.0, 1.0, 0.0],
                            [0.0, 0.0, 1.0]])
         
+        '''
+        observation matrix
+        '''
+        self.__C=np.array([[1.0, 0.0, 0.0],
+                           [0.0, 1.0, 0.0]])
+        
         # self.__sensor_range=3.0
         
         '''
@@ -148,8 +154,8 @@ class ParticleFilter:
             diff_x=i+v-self.__refx.T[:,0:1]
             if np.sqrt((diff_x[0,0])**2+(diff_x[0,1])**2)<min:
                 # Set observed distance
-                min=np.sqrt((diff_x[0,0])**2+(diff_x[0,1])**2)
-                observed_z=diff_x
+                min = np.sqrt((diff_x[0,0])**2+(diff_x[0,1])**2)
+                observed_z = self.__C @ diff_x
                 target_landmark=i
         
         return observed_z, target_landmark
@@ -212,7 +218,7 @@ class ParticleFilter:
             self.__land_mark_list: The positions of all landmarks
             target_landmark:    The position of the nearst landmark
         '''
-        # Renew state
+        # Update state
         self.__refx = self.__state_equation(self.__refx)
         
         # --------------Particle Filter----------------
