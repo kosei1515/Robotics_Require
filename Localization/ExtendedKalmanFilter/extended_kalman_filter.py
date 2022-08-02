@@ -47,7 +47,7 @@ class ExtendedKalmanFilter(object):
         
         
         '''
-        State transition matrix
+        State transition matrix A
         '''
         self.__A=np.array([[1.0, 0.0, 0.0],
                            [0.0, 1.0, 0.0],
@@ -267,23 +267,12 @@ def anim(i, ekf):
     ax1.scatter(landmarks[:, 0], landmarks[:, 1], s=100, c="yellow", marker="*", alpha=0.5, edgecolors="orange")
     ax2.scatter(landmarks[:, 0], landmarks[:, 1], s=100, c="yellow", marker="*", alpha=0.5, edgecolors="orange")
     
-    # Plot line
-    # est_t = x_hat[0, 0:2]
-    # x = np.array([est_t[0], target_landmark[0]])
-    # y = np.array([est_t[1], target_landmark[1]])
-    # ax1.plot(x, y, '--', c='green')
-    # ax2.plot(x, y, '--', c='green')
-    
-    # Plot x of all particles
-    # ax1.scatter(px[:,0], px[:,1], c='cyan', marker='o', alpha=0.5)
-    # ax2.scatter(px[:,0], px[:,1], c='cyan', marker='o', alpha=0.5)
-    # ax2.quiver(px[:,0], px[:,1], np.cos(px[:,2]), np.sin(px[:,2]), color='cyan', units='inches', scale=6.0, width=0.01,
-    #            headwidth=0.0, headlength=0.0, headaxislength=0.0)
-    
     # Plot x trajectory
     x_list.append(ref_x[0,0])
     y_list.append(ref_x[0,1])
     
+    
+    # Plot a robot on the reference path----------------------------------------
     c = patches.Circle(xy=(ref_x[0,0], ref_x[0,1]), radius=0.5, ec='#000000', fill=False)
     r1 = patches.Rectangle(xy=(ref_x[0,0] + 0.3*np.sin(ref_x[0,2]), ref_x[0,1] - 0.3*np.cos(ref_x[0,2])), width=0.25, height=0.1, angle = math.degrees(ref_x[0,2]), ec='#000000', fill=False)
     r2 = patches.Rectangle(xy=(ref_x[0,0] - 0.2*np.sin(ref_x[0,2]), ref_x[0,1] + 0.2*np.cos(ref_x[0,2])), width=0.25, height=0.1, angle = math.degrees(ref_x[0,2]), ec='#000000', fill=False)
@@ -303,8 +292,8 @@ def anim(i, ekf):
     ax2.add_patch(r2)
     ax2.quiver(ref_x[:,0], ref_x[:,1], np.cos(ref_x[:,2]), np.sin(ref_x[:,2]), color='red', units='inches', scale=6.0,
                width=0.01, headwidth=0.0, headlength=0.0, headaxislength=0.0)
-    
-    # Plot estimated x trajectory
+    # ----------------------
+    # Plot estimated x trajectory------------------------------
     est_x_list.append(x_hat[0,0])
     est_y_list.append(x_hat[0,1])
     
@@ -327,8 +316,9 @@ def anim(i, ekf):
     ax2.add_patch(c)
     ax2.add_patch(r1)
     ax2.add_patch(r2)
+    # ----------------------------------
     
-    # Plot observed x trajectory
+    # Plot observed x trajectory---------------------------------
     observed_x_list.append(observed_x[0,0])
     observed_y_list.append(observed_x[0,1])
     
@@ -337,17 +327,7 @@ def anim(i, ekf):
     
     ax2.plot(observed_x_list, observed_y_list, c = 'green', linewidth=1.0, linestyle='-', label='Observed')
     ax2.scatter(observed_x[:,0], observed_x[:,1], c='green', marker='o', alpha=0.5)
-    # ax2.quiver(observed_x[:,0], observed_x[:,1], np.cos(observed_x[:,2]), np.sin(observed_x[:,2]), color='red', units='inches', scale=6.0,
-    #            width=0.01, headwidth=0.0, headlength=0.0, headaxislength=0.0)
-    
-    # Plot label
-    # txt = 'Maximuim Likelihood Estimate:\n[Index]:{0}\n[Weight]:{1:.3f}'.format(w_idx, w_val)
-    # ax2.annotate(txt, xy=(x_hat[0, 0], x_hat[1, 0]), xycoords='data',
-    #             xytext=(0.55, 0.9), textcoords='axes fraction',
-    #             bbox=dict(boxstyle='round,pad=0.5', fc=(1.0, 0.7, 0.7)),
-    #             arrowprops=dict(arrowstyle="->", color='black',
-    #                             connectionstyle='arc3,rad=0'),
-    #             )
+    # ---------------------------
 
     ax1.set_xlabel('x [m]')
     ax1.set_ylabel('y [m]')
